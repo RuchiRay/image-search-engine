@@ -1,27 +1,33 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { useSelector, useDispatch } from "react-redux";
-import { addImage,empty,resetPage } from "../action/action";
+import { addImage, empty, resetPage } from "../action/action";
 const key = process.env.REACT_APP_API_KEY;
 export const Collection = () => {
-  const [dataFetched, setDataFetched] = useState(true)
-  
+  const [dataFetched, setDataFetched] = useState(true);
+
   const dispatch = useDispatch();
   const term = useSelector((state) => state.term);
   const pages = useSelector((state) => state.pages);
- 
+
   const images = useSelector((state) => state.images);
   const box = images.imageBox;
-  console.log('printing box',box);
+  console.log("printing box", box);
   const url = `https://api.unsplash.com/search/photos?page=${pages}&per_page=20&query=${term.searchTerm}&client_id=${key}`;
+  
+
+  useEffect(() => {
+    dispatch(empty());
+    dispatch(resetPage());
+  }, [term, dispatch]);
+
+  useEffect(() => {
     const getImages = async () => {
       const response = await fetch(url);
       const data = await response.json();
       const { results } = data;
-      if(results.length===0)
-     setDataFetched(false)
-      else
-      setDataFetched(true)
+      if (results.length === 0) setDataFetched(false);
+      else setDataFetched(true);
       const collection = results.map((item) => {
         const { id, urls, user, likes } = item;
         const image = {
@@ -31,29 +37,17 @@ export const Collection = () => {
           creator: user.name,
           creatorLink: user.links.html,
         };
-
+  
         return image;
       });
       dispatch(addImage(collection));
-    
-     
     };
-  
-  useEffect(() => {
-    dispatch(empty())
-    dispatch((resetPage()))
-   
-  }, [term,dispatch])
- 
-  useEffect(() => {
-    
-    
-    getImages();
-  }, [ pages]);
-  if(dataFetched===false)
-  return <p>No image found for your search term</p>;
-  if (box.length<=0) return <p>loading</p>;
- 
+    getImages()
+  }, [pages,dispatch,url]);
+
+  if (dataFetched === false) return <p>No image found for your search term</p>;
+  if (box.length <= 0) return <p>loading</p>;
+
   return (
     <div className="collection">
       <div className="masonry-layout">
