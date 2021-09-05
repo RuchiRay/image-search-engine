@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { useSelector, useDispatch } from "react-redux";
-import { addImage, empty, resetPage } from "../action/action";
+import { addImage, empty,resetPage} from "../action/action";
 const key = process.env.REACT_APP_API_KEY;
 export const Collection = () => {
   const [dataFetched, setDataFetched] = useState(true);
@@ -13,17 +13,20 @@ export const Collection = () => {
   const images = useSelector((state) => state.images);
   const box = images.imageBox;
   console.log("printing box", box);
-  const url = `https://api.unsplash.com/search/photos?page=${pages}&per_page=20&query=${term.searchTerm}&client_id=${key}`;
-  
+  const urlSeacrh = `https://api.unsplash.com/search/photos?page=1&per_page=20&query=${term.searchTerm}&client_id=${key}`;
+
+  const urlLoad = `https://api.unsplash.com/search/photos?page=${pages}&per_page=20&query=${term.searchTerm}&client_id=${key}`;
 
   useEffect(() => {
     dispatch(empty());
-    dispatch(resetPage());
+    dispatch(resetPage())
   }, [term, dispatch]);
 
   useEffect(() => {
     const getImages = async () => {
-      const response = await fetch(url);
+      console.log('chnage in urlsearch');
+      
+      const response = await fetch(urlSeacrh);
       const data = await response.json();
       const { results } = data;
       if (results.length === 0) setDataFetched(false);
@@ -37,13 +40,40 @@ export const Collection = () => {
           creator: user.name,
           creatorLink: user.links.html,
         };
-  
+
         return image;
       });
       dispatch(addImage(collection));
     };
-    getImages()
-  }, [pages,dispatch]);
+    getImages();
+  }, [dispatch, urlSeacrh]);
+
+  useEffect(() => {
+    const getMore = async () => {
+      console.log('change in page');
+      
+      const response = await fetch(urlLoad);
+      const data = await response.json();
+      const { results } = data;
+      if (results.length === 0) setDataFetched(false);
+      else setDataFetched(true);
+      const collection = results.map((item) => {
+        const { id, urls, user, likes } = item;
+        const image = {
+          id: id,
+          imgUrl: urls.regular,
+          like: likes,
+          creator: user.name,
+          creatorLink: user.links.html,
+        };
+
+        return image;
+      });
+      dispatch(addImage(collection));
+    };
+    if(pages>1)
+    getMore();
+  }, [pages,dispatch])
 
   if (dataFetched === false) return <p>No image found for your search term</p>;
   if (box.length <= 0) return <p>loading</p>;
