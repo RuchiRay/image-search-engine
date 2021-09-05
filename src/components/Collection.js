@@ -43,7 +43,7 @@ export const Collection = () => {
       dispatch(addImage(collection));
     };
     getImages()
-  }, [pages,dispatch,url]);
+  }, [pages,dispatch]);
 
   if (dataFetched === false) return <p>No image found for your search term</p>;
   if (box.length <= 0) return <p>loading</p>;
