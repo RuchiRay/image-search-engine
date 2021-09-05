@@ -1,0 +1,119 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+.App{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f3;
+   }
+.App h1{
+  font-size: 4rem;
+  margin: 30px;
+}
+.search-form{
+  margin-bottom: 50px;
+}
+.form{
+  display: flex;
+  flex-wrap: wrap;
+}
+input{
+  width: 600px;
+  padding: 0px 20px;
+  font-size: 20px;
+  border: none;
+}
+.btn{
+  padding: 10px 30px;
+  border: none;
+  outline: none;
+  width: 110px;
+  margin-left: 30px;
+  background-color: black;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.btn.load-btn{
+  color: white;
+  width: 200px;
+  font-size: 20px;
+  margin: 50px;
+}
+button:active{
+  border: none;
+  outline: none;
+}
+.search-icon{
+  color: white;
+  font-size: 1.5rem;
+}
+.collection {
+    max-width: 1340px;
+    margin: 0 auto;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .masonry-layout {
+    column-count: 3;
+    column-gap: 20px;
+  }
+  
+  .image {
+    margin-bottom: 20px;
+    -webkit-column-break-inside: avoid; /* Chrome, Safari, Opera */
+    page-break-inside: avoid; /* Firefox */
+    break-inside: avoid; /* IE 10+ */
+    position: relative;
+    overflow: hidden;
+  }
+  .image-info{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      color: white;
+      background: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7));
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0px 20px 10px 20px;
+      font-size: 20px;  opacity: 0;
+      transition: all 0.5s linear;
+  }
+  .image:hover .image-info{
+    
+      opacity: 1;
+  }
+  .image-info a{
+      text-decoration: none;
+      color: white;
+  }
+  @media (max-width: 768px) {
+    .masonry-layout {
+      column-count: 2;
+      column-gap: 10px;
+    }
+  
+    .image {
+      margin-bottom: 10px;
+    }
+  }
+  
+  /* You can do this if you want only 1 column in smaller devices 👇👇 */
+  @media (max-width: 450px) {
+      .masonry-layout {
+        column-count: 1;
+      }
+    }
+  
