@@ -5,11 +5,11 @@ import { addImage, empty,resetPage} from "../action/action";
 const key = process.env.REACT_APP_API_KEY;
 export const Collection = () => {
   const [dataFetched, setDataFetched] = useState(true);
-
+ const [loading, setLoading] = useState(true)
   const dispatch = useDispatch();
   const term = useSelector((state) => state.term);
   const pages = useSelector((state) => state.pages);
-
+   
   const images = useSelector((state) => state.images);
   const box = images.imageBox;
   console.log("printing box", box);
@@ -24,8 +24,7 @@ export const Collection = () => {
 
   useEffect(() => {
     const getImages = async () => {
-      console.log('chnage in urlsearch');
-      
+      setLoading(true)
       const response = await fetch(urlSeacrh);
       const data = await response.json();
       const { results } = data;
@@ -44,6 +43,7 @@ export const Collection = () => {
         return image;
       });
       dispatch(addImage(collection));
+      setLoading(false)
     };
     getImages();
   }, [dispatch, urlSeacrh]);
@@ -70,13 +70,15 @@ export const Collection = () => {
         return image;
       });
       dispatch(addImage(collection));
+     
     };
     if(pages>1)
     getMore();
   }, [pages,dispatch])
 
   if (dataFetched === false) return <p>No image found for your search term</p>;
-  if (box.length <= 0) return <p>loading</p>;
+  // if (box.length <= 0) return <p>loading</p>;
+  if (loading===true) return <p>loading</p>;
 
   return (
     <div className="collection">
